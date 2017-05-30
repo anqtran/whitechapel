@@ -1,6 +1,8 @@
 package edu.gsu.csc2720.prj3.atran;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -18,7 +20,7 @@ public class Night {
 	/**
 	 * the crime scene.
 	 */
-	private String[] crimeScene;
+	private List<String> crimeScene;
 	/**
 	 * current turn of the night.
 	 * there are 15 turns in one night.
@@ -46,11 +48,11 @@ public class Night {
 	/**
 	 * String of faked token that Jack placed.
 	 */
-	private String[] fakeToken;
+	private List<String> fakeToken;
 	/**
 	 * String of marked token that Jack placed.
 	 */
-	private String[] markedToken;
+	private List<String> markedToken;
 	/**
 	 * GameBoard of the game.
 	 */
@@ -95,17 +97,24 @@ public class Night {
 	 * Ask Jack to place the marked token to set up the night.
 	 * @return the locations of all the marked token.
 	 */
-	private String[] markedTokenGenerator() {
-		String[] markedToken = new String[womenToken[0]];
+	private List<String> markedTokenGenerator() {
+		System.out.println("Setting up Crime Scene! ");
+		List <String> markedToken = new ArrayList<>();
+		int numberOfMarkedToken = womenToken[0];
 		Scanner sc = new Scanner(System.in);
-		for (int i = 0; i < markedToken.length; i++) {
+		for (int i = 0; i < numberOfMarkedToken; i++) {
 			System.out.println("Choose one location in the list below"
 					+ " to place marked token : ");
 			for (String crime : crimeSceneSet) {
 				System.out.print(crime + "  ");
 			}
 			String choseToken = sc.next();
-			markedToken[i] = choseToken;
+			while(! crimeSceneSet.contains(choseToken)) {
+				System.out.println("Your choice is not in the list.") ;
+				System.out.println("Please pick the circle in the list:");
+				choseToken = sc.next();
+			}
+			markedToken.add(choseToken);
 			crimeSceneSet.remove(choseToken);
 		}
 		return markedToken;
@@ -114,17 +123,23 @@ public class Night {
 	 * Ask Jack to place the fake token to set up the night.
 	 * @return the locations of fake token.
 	 */
-	private String[] fakeTokenGenerator() {
+	private List<String> fakeTokenGenerator() {
 		Scanner sc = new Scanner(System.in);
-		String[] fakeToken = new String[womenToken[1]];
-		for (int i = 0; i < fakeToken.length; i++) {
+		List<String> fakeToken = new ArrayList<String>();
+		int numberOfFakeToken = womenToken[1];
+		for (int i = 0; i < numberOfFakeToken; i++) {
 			System.out.println("Choose one location in the"
 								+ " list below to place fake token : ");
 			for (String crime : crimeSceneSet) {
 				System.out.print(crime + "  ");
 			}
 			String choseToken = sc.next();
-			fakeToken[i] = choseToken;
+			while(! crimeSceneSet.contains(choseToken)) {
+				System.out.println("Your choice is not in the list.") ;
+				System.out.println("Please pick the circle in the list:");
+				choseToken = sc.next();
+			}
+			fakeToken.add(choseToken);
 			crimeSceneSet.remove(choseToken);
 		}
 		return fakeToken;
@@ -144,6 +159,11 @@ public class Night {
 				System.out.print(location + "  ");
 			}
 			String choseLocation = sc.next();
+			while (!detectivesStartingLocation.contains(choseLocation)) {
+				System.out.println(" Your square is not in the list.");
+				System.out.println("Please pick the square in the list:");
+				choseLocation = sc.next();
+			}
 			dts[i].setLocation(choseLocation);
 			detectivesStartingLocation.remove(choseLocation);
 		}
@@ -212,11 +232,11 @@ public class Night {
 	 * If wait, let the detectives move all the marked token.
 	 * @return the crime scene of the night.
 	 */
-	private String[] crimeSceneGenerator() {
+	private List<String> crimeSceneGenerator() {
 		int numberofCS = 1;
 		if (currentNight == 3)
 			numberofCS = 2;
-		String[] cs = new String[numberofCS];
+		List<String> cs = new ArrayList<String>();
 		Scanner scan = new Scanner(System.in);
 		boolean kill = false;
 		while (!kill) {
@@ -228,27 +248,40 @@ public class Night {
 				System.out.println("Jack's turn: ");
 				System.out.println("Please choose " +
 				numberofCS + " from the locations below to be the Crime Scene:");
-				for (int i = 0; i < markedToken.length; i++) {
-					System.out.print(markedToken[i] + "  ");
+				for (int i = 0; i < markedToken.size(); i++) {
+					System.out.print(markedToken.get(i) + "  ");
 				}
-				for (int i = 0; i < cs.length; i++) {
+				for (int i = 0; i < cs.size(); i++) {
 					if (i != 0) {
 						System.out.println("Choose the fake crime scene: ");
 					}
-					cs[i] = scan.next();
+					String input = scan.next();
+					while(! markedToken.contains(input)) {
+						System.out.println("Your choice is not in the list.") ;
+						System.out.println("Please pick the square in the list:");
+						input = scan.next();
+					}
+					cs.add(input);
 				}
 
 			} else { // if Jack choose to wait
 				currentTurn--;
-				for (int i = 0; i < markedToken.length; i++) {
+				for (int i = 0; i < markedToken.size(); i++) {
+					String token = markedToken.get(i);
 					System.out.println("Detectives turn: ");
 					System.out.println("Choose one in the locations below to move the "
-					+ markedToken[i] + " token: ");
-					Set<String> adjacentCircles = getConnectedCircle(markedToken[i]);
+					+ markedToken.get(i) + " token: ");
+					Set<String> adjacentCircles = getConnectedCircle(token);
 					for (String s : adjacentCircles) {
 						System.out.print(s + "  ");
 					}
-					markedToken[i] = scan.next();
+					String input = scan.next();
+					while(! markedToken.contains(input)) {
+						System.out.println("Your choice is not in the list.") ;
+						System.out.println("Please pick the square in the list:");
+						input = scan.next();
+					}
+					markedToken.set(i,input);
 				}
 			}
 		}
@@ -271,14 +304,14 @@ public class Night {
 	 * crime scene getter
 	 * @return the crime scene.
 	 */
-	public final String[] getCrimeScene() {
+	public final List<String> getCrimeScene() {
 		return crimeScene;
 	}
 	/**
 	 * crime scene setter.
 	 * @param crimeScene the crime scene;
 	 */
-	public final void setCrimeScene(final String[] crimeScene) {
+	public final void setCrimeScene(final List<String> crimeScene) {
 		this.crimeScene = crimeScene;
 	}
 	/**
