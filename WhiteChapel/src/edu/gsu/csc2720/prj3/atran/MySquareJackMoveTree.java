@@ -54,7 +54,7 @@ public class MySquareJackMoveTree extends DirectedAcyclicGraph<Vertex, Edge> {
 	 * @param endVertex destination circle.
 	 * @return true if there is a detectives on the path.
 	 */
-	public final boolean detectivesOnPath(final String endVertex) {
+	public final boolean checkDetectivesOnPath(final String endVertex) {
 		return true;
 	}
 }
