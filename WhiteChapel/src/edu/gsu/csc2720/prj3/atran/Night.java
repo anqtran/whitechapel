@@ -300,7 +300,7 @@ public class Night {
 	 * Detectives getter.
 	 * @return detectives.
 	 */
-	public final Detectives getDetectives() {
+	public final MyDetectives getDetectives() {
 		return detectives;
 	}
 	/**
