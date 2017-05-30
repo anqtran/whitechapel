@@ -8,6 +8,7 @@ import org.eareddick.whitechapel.Detective;
 import org.eareddick.whitechapel.Detectives;
 import org.eareddick.whitechapel.Edge;
 import org.eareddick.whitechapel.GameBoard;
+import org.eareddick.whitechapel.MyDetectives;
 /**
  * Class illustrates the night of White Chapel.
  * @author anqtr
@@ -41,7 +42,7 @@ public class Night {
 	/**
 	 * detectives class.
 	 */
-	private Detectives detectives;
+	private MyDetectives detectives;
 	/**
 	 * String of faked token that Jack placed.
 	 */
@@ -81,7 +82,7 @@ public class Night {
 	 * @param currentNight nunmber of night.
 	 * @param dt detectives location from last night.
 	 */
-	public Night(final int currentNight, final Detectives dt) {
+	public Night(final int currentNight, final MyDetectives dt) {
 		this.currentNight = currentNight;
 		this.coachAlley = specialTokensGenerator(currentNight);
 		this.womenToken = tokenGenerator(currentNight);
@@ -132,9 +133,9 @@ public class Night {
 	 * Place the detectives in different location at the beginning of the night.
 	 * @return detectives.
 	 */
-	private Detectives detectivesGenerator() {
+	private MyDetectives detectivesGenerator() {
 		Scanner sc = new Scanner(System.in);
-		Detectives dt = new Detectives();
+		MyDetectives dt = new MyDetectives();
 		Detective[] dts = dt.getDetectives();
 		for (int i = 0; i < dts.length; i++) {
 			System.out.println(dts[i].getColor() + " detective:");
@@ -306,7 +307,7 @@ public class Night {
 	 * detectives setter.
 	 * @param detectives detectives.
 	 */
-	public final void setDetectives(final Detectives detectives) {
+	public final void setDetectives(final MyDetectives detectives) {
 		this.detectives = detectives;
 	}
 	/**

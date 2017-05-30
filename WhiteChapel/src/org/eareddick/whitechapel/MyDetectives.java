@@ -36,7 +36,7 @@ public class MyDetectives extends Detectives {
 	/**
 	 * process the detectives move.
 	 */
-	private void move(Jack jack) {
+	public void move(Jack jack) {
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Detectives' turn: ");
 		Detective[] dts = this.getDetectives();
@@ -96,9 +96,11 @@ public class MyDetectives extends Detectives {
 	 * @param detectives detectives
 	 * @param jack jack
 	 * @param rushUsed array contains the rush used of each detectives.
+	 * @return true if jack is caught.
 	 */
-	private void investigation(
-			final Jack jack, MoveTree mt) {
+	public boolean investigation(
+			final Jack jack, final MoveTree mt) {
+		boolean caughtJack = false;
 		System.out.println("Investigation Starting......");
 		Scanner sc = new Scanner(System.in);
 		SimpleGraph<String, Edge> mixedGraph = gb.getMixedGraph();
@@ -154,35 +156,30 @@ public class MyDetectives extends Detectives {
 					}
 					System.out.println();
 					String location = sc.next();
-					boolean answer = false;
 					if (location.equals(jack.getCurrentLocation())) {
-						answer = true;
-						endNight = true;
+						caughtJack = true;
 					}
-					AttemptArrest aa = new AttemptArrest(detectivesMove.get(i), "C82");
-					AttemptArrestResult aar = new AttemptArrestResult(aa, answer);
+					AttemptArrest aa = new AttemptArrest(detectivesMove.get(i), location);
+					AttemptArrestResult aar = new AttemptArrestResult(aa, caughtJack);
 					mt.processDetectiveMoveResult(aar);
 				}
 			} else {
 				System.out.println("You cannot investigate since you have used rush.");
 			}
 		}
+		return caughtJack;
 	}
 	/**
 	 * Get the circles that adjacent to the location.
 	 * @param root current location.
 	 * @param a map choice depends on the location type
-	 * 0 to get the circle graph.
 	 * 1 to get the square graph.
 	 * 2 to get the mixed graph.
 	 * @return the set of adjacent vertex.
 	 */
 	public final Set<String> getAdjacentVertex(final String root, final int a) {
 		SimpleGraph<String, Edge> myGraph;
-		if (a == 0) {
-			myGraph = gb.getCircleGraph();
-		}
-		else if (a == 1) {
+		 if (a == 1) {
 			myGraph = gb.getSquareGraph();
 		} else {
 			myGraph = gb.getMixedGraph();
@@ -194,4 +191,23 @@ public class MyDetectives extends Detectives {
 		}
 		return vertexSet;
 	}
+	public List<List<String>> getDetectivesMove() {
+		return detectivesMove;
+	}
+	public void setDetectivesMove(List<List<String>> detectivesMove) {
+		this.detectivesMove = detectivesMove;
+	}
+	public GameBoard getGb() {
+		return gb;
+	}
+	public void setGb(GameBoard gb) {
+		this.gb = gb;
+	}
+	public boolean[] getRushUsed() {
+		return rushUsed;
+	}
+	public void setRushUsed(boolean[] rushUsed) {
+		this.rushUsed = rushUsed;
+	}
+	
 }

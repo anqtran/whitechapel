@@ -93,7 +93,7 @@ public class Jack {
 		System.out.println("Jack's turn: ");
 		System.out.println("Choose one location from the list below: ");
 		Set<String> adjacentLocation =
-				getJackAdjacentVertex(currentLocation, 0);
+				getJackAdjacentVertex(currentLocation);
 		for (String location : adjacentLocation) {
 			System.out.print(location + "  ");
 		}
@@ -104,16 +104,8 @@ public class Jack {
 		System.out.println();
 
 	}
-	public final Set<String> getJackAdjacentVertex(final String root, final int a) {
-		SimpleGraph<String, Edge> myGraph;
-		if (a == 0) {
-			myGraph = gb.getCircleGraph();
-		}
-		else if (a == 1) {
-			myGraph = gb.getSquareGraph();
-		} else {
-			myGraph = gb.getMixedGraph();
-		}
+	public final Set<String> getJackAdjacentVertex(final String root) {
+		SimpleGraph<String, Edge> myGraph = gb.getCircleGraph();
 		Set<String> vertexSet = new HashSet<String>();
 		Set<Edge> edgeSet = myGraph.edgesOf(root);
 		MySquareJackMoveTree squareMoveTree = new MySquareJackMoveTree(gb,root);

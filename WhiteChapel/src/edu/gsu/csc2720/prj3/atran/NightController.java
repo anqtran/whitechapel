@@ -20,6 +20,7 @@ import org.eareddick.whitechapel.Detectives;
 import org.eareddick.whitechapel.Edge;
 import org.eareddick.whitechapel.GameBoard;
 import org.eareddick.whitechapel.MoveTree;
+import org.eareddick.whitechapel.MyDetectives;
 import org.jgrapht.graph.SimpleGraph;
 /**
  * Class to control all activities in the night.
@@ -38,13 +39,7 @@ public class NightController {
 	/**
 	 * detectives.
 	 */
-	private Detectives detectives;
-	/**
-	 * return true if the night is ended.
-	 * when Jack reaches the hide out, Jack is caught or
-	 * number of turn greater than 15 and Jack has not got to the hideout.
-	 */
-	private boolean endNight = false;
+	private MyDetectives detectives;
 	/**
 	 *  the board game.
 	 */
@@ -65,7 +60,7 @@ public class NightController {
 	 * @param hideOut Jack's hide out.
 	 */
 	public NightController(final Night night, final Jack jack,
-			final Detectives detectives, final String hideOut) {
+			final MyDetectives detectives, final String hideOut) {
 		super();
 		this.night = night;
 		this.jack = jack;
@@ -79,22 +74,27 @@ public class NightController {
 	 */
 	public final boolean run() {
 		for (int i = 0; i < 5; i++) {
-			detectivesMove.add(new ArrayList<String>());
-			detectivesMove.get(i).add(detectives.getDetectives()[i].getLocation());
+			detectives.getDetectivesMove().add(new ArrayList<String>());
+			detectives.getDetectivesMove().get(i).add(detectives.getDetectives()[i].getLocation());
 		}
 		System.out.println("Night " + night.getCurrentNight() + " begins!!! ");
-		while (!endNight) {
-			int turn = night.getCurrentTurn() + 1;
+		int turn = night.getCurrentTurn();
+		while (turn < 15) {
+			turn++;
+			night.setCurrentTurn(turn);
 			System.out.println("Turn " + turn);
 			jack.move(detectives);
-			detectivesMove();
-			investigation(jack, mt);
-			night.setCurrentTurn(turn);
+			detectives.move(jack);
+			boolean caughtJack = detectives.investigation(jack, mt);
 			// if jack reaches the hideouts, start new night.
+			if (caughtJack) {
+				System.out.println("Jack was caught by the detectives. Game Over!");
+				return false;
+			}
 			if (jack.getCurrentLocation().equals(hideOut)) {
-				System.out.println("Jack got to his hide out, night " +
-			night.getCurrentNight() + 1 + " will start soon...");
-				endNight = true;
+				System.out.println("Jack got to his hide out, night "
+						+ night.getCurrentNight() + 1 + " will start soon...");
+				return true;
 			} else {
 				if (turn == 15) {
 					System.out.println("Jack cannot reach his hideOut in the night"
@@ -104,7 +104,7 @@ public class NightController {
 			}
 			System.out.println("Turn " + turn + " ends. ");
 		}
-		return true;
+		return false;
 	}
 	/**
 	 * process the detectives move.
