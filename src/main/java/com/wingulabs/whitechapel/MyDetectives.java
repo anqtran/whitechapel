@@ -1,4 +1,4 @@
-package org.eareddick.whitechapel;
+package com.wingulabs.whitechapel;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,13 +9,12 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.eareddick.whitechapel.DetectiveMove.AttemptArrest;
-import org.eareddick.whitechapel.DetectiveMove.SearchClues;
-import org.eareddick.whitechapel.DetectiveMoveResult.AttemptArrestResult;
-import org.eareddick.whitechapel.DetectiveMoveResult.SearchCluesResult;
 import org.jgrapht.graph.SimpleGraph;
 
-import edu.gsu.csc2720.prj3.atran.Jack;
+import com.wingulabs.whitechapel.DetectiveMove.AttemptArrest;
+import com.wingulabs.whitechapel.DetectiveMove.SearchClues;
+import com.wingulabs.whitechapel.DetectiveMoveResult.AttemptArrestResult;
+import com.wingulabs.whitechapel.DetectiveMoveResult.SearchCluesResult;
 
 public class MyDetectives extends Detectives {
 	/**

@@ -1,12 +1,10 @@
-package edu.gsu.csc2720.prj3.atran;
+package com.wingulabs.whitechapel;
 
 import java.util.HashSet;
 
-import org.eareddick.whitechapel.Edge;
-import org.eareddick.whitechapel.GameBoard;
-import org.eareddick.whitechapel.MoveTree;
-import org.eareddick.whitechapel.MoveTree.Vertex;
 import org.jgrapht.experimental.dag.DirectedAcyclicGraph;
+
+import com.wingulabs.whitechapel.MoveTree.Vertex;
 /**
  * Square Map starts with current location and
  * generates all the square vertex in the middle

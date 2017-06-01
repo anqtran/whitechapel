@@ -1,27 +1,6 @@
-package edu.gsu.csc2720.prj3.atran;
+package com.wingulabs.whitechapel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
-
-import org.eareddick.whitechapel.Answer;
-import org.eareddick.whitechapel.Detective;
-import org.eareddick.whitechapel.Detective.DetectiveColor;
-import org.eareddick.whitechapel.DetectiveMove.AttemptArrest;
-import org.eareddick.whitechapel.DetectiveMove.SearchClues;
-import org.eareddick.whitechapel.DetectiveMoveResult.AttemptArrestResult;
-import org.eareddick.whitechapel.DetectiveMoveResult.SearchCluesResult;
-import org.eareddick.whitechapel.Detectives;
-import org.eareddick.whitechapel.Edge;
-import org.eareddick.whitechapel.GameBoard;
-import org.eareddick.whitechapel.MoveTree;
-import org.eareddick.whitechapel.MyDetectives;
-import org.jgrapht.graph.SimpleGraph;
 /**
  * Class to control all activities in the night.
  * @author anqtr

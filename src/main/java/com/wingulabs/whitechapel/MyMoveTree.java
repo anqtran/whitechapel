@@ -1,4 +1,4 @@
-package edu.gsu.csc2720.prj3.atran;
+package com.wingulabs.whitechapel;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -6,19 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eareddick.whitechapel.Answer;
-import org.eareddick.whitechapel.Detective;
-import org.eareddick.whitechapel.DetectiveMoveResult;
-import org.eareddick.whitechapel.DetectiveMoveResult.AttemptArrestResult;
-import org.eareddick.whitechapel.DetectiveMoveResult.SearchCluesResult;
-import org.eareddick.whitechapel.Detectives;
-import org.eareddick.whitechapel.Edge;
-import org.eareddick.whitechapel.GameBoard;
-import org.eareddick.whitechapel.MoveTree;
-import org.eareddick.whitechapel.MoveTree.Vertex;
-import org.jgrapht.EdgeFactory;
-import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
+
+import com.wingulabs.whitechapel.DetectiveMoveResult.AttemptArrestResult;
+import com.wingulabs.whitechapel.DetectiveMoveResult.SearchCluesResult;
 /**
  * Move Tree to simulate Jack Move.
  * @author anqtr

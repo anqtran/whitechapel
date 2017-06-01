@@ -1,4 +1,4 @@
-package edu.gsu.csc2720.prj3.atran;
+package com.wingulabs.whitechapel;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -6,9 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 
-import org.eareddick.whitechapel.Detectives;
-import org.eareddick.whitechapel.Edge;
-import org.eareddick.whitechapel.GameBoard;
 import org.jgrapht.graph.SimpleGraph;
 /**
  * White Chapel Jack.

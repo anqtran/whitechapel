@@ -1,4 +1,4 @@
-package edu.gsu.csc2720.prj3.atran;
+package com.wingulabs.whitechapel;
 /**
  * Class runs and controls the game.
  * @author anqtr
