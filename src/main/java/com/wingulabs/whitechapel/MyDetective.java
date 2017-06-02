@@ -1,7 +1,6 @@
-package edu.gsu.csc2720.prj3.atran;
+package com.wingulabs.whitechapel;
 
 import java.util.ArrayList;
-import org.eareddick.whitechapel.Detective;
 /**
  * My detectives class.
  * @author anqtr

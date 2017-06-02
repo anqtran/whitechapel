@@ -1,7 +1,4 @@
-package edu.gsu.csc2720.prj3.atran;
-
-import org.eareddick.whitechapel.Detectives;
-import org.eareddick.whitechapel.MyDetectives;
+package com.wingulabs.whitechapel;
 
 public class Project3Tester {
 

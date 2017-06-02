@@ -1,8 +1,4 @@
-package edu.gsu.csc2720.prj3.atran;
-import org.eareddick.whitechapel.DetectiveMove;
-import org.eareddick.whitechapel.Detectives;
-import org.eareddick.whitechapel.GameEngine;
-import org.eareddick.whitechapel.MoveTree;
+package com.wingulabs.whitechapel;
 
 /**
  * Class generates the logic of move detective.
