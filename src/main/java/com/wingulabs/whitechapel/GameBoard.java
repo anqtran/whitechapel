@@ -37,6 +37,12 @@ public class GameBoard {
 	public static final String PRIMARY_EDGES_FILEPATH = "edges.txt";
 
 	/**
+	 * File containing alley circle-to-circle edge data.
+	 */
+	public static final String ALLEY_CIRCLE_TO_CIRCLE_FILEPATH =
+			"alley_edges.txt";
+
+	/**
 	 * The graph containing square-to-square edges.
 	 */
 	private final SimpleGraph<String, Edge> squareGraph =
@@ -52,6 +58,12 @@ public class GameBoard {
 	 * The graph containing circle-to-circle edges.
 	 */
 	private final SimpleGraph<String, Edge> circleGraph =
+			new SimpleGraph<>(Edge.class);
+
+	/**
+	 * The graph containing circle-to-circle alley edges.
+	 */
+	private final SimpleGraph<String, Edge> alleyCircleGraph =
 			new SimpleGraph<>(Edge.class);
 
 	/**
@@ -168,7 +180,38 @@ public class GameBoard {
 				}
 			}
 		}
+		
+		initAlleyCircleGraph();
 
+	}
+	
+	private void initAlleyCircleGraph() throws IOException {
+		try (BufferedReader rdr = new BufferedReader(new InputStreamReader(
+				getClass().getClassLoader().
+				getResource(ALLEY_CIRCLE_TO_CIRCLE_FILEPATH).openStream()))) {
+
+			String line = null;
+			while ((line = rdr.readLine()) != null) {
+				//System.out.println(line);
+				if (line.isEmpty() || line.startsWith("#"))
+					continue;
+
+				if (!line.startsWith("C"))
+					throw new RuntimeException("Detected invalid line: '" + line + "'");
+
+				String[] parts = line.split(":");
+				if (parts.length != 2)
+					throw new RuntimeException("Detected invalid line: '" + line + "'");
+				String sourceVertex = parts[0];
+				
+				String[] destVertices = parts[1].split(",");
+				for (String destVertex : destVertices) {
+					alleyCircleGraph.addVertex(sourceVertex);
+					alleyCircleGraph.addVertex(destVertex);
+					alleyCircleGraph.addEdge(sourceVertex, destVertex);
+				}
+			}
+		}
 	}
 
 	/**
@@ -262,6 +305,14 @@ public class GameBoard {
 	 */
 	public SimpleGraph<String, Edge> getMixedGraph() {
 		return mixedGraph;
+	}
+
+	/**
+	 * Returns the alley circle graph.
+	 * @return the alley circle graph.
+	 */
+	public SimpleGraph<String, Edge> getAlleyCircleGraph() {
+		return alleyCircleGraph;
 	}
 
 }
