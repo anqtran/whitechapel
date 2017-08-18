@@ -2,11 +2,10 @@ package com.wingulabs.whitechapel.nightController;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Set;
 
+import com.wingulabs.whitechapel.Utility.ConsoleUtility;
 import com.wingulabs.whitechapel.Utility.GraphUtility;
 import com.wingulabs.whitechapel.detectives.Detective;
 import com.wingulabs.whitechapel.detectives.Detectives;
@@ -27,22 +26,11 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 		this.detectives = detectives;
 	}
 
-	private String selectDetectivesTargetedLocation(final Set<String> possibleLocation, final int detectiveIndex,
-			final List finalDestination) {
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Choose one location from the list below: ");
-		for (String location : possibleLocation) {
-			System.out.print(location + "  ");
-		}
-		System.out.println();
-		String updatedLocation = sc.next();
-		boolean checkDuplicate = checkDuplicatePosition(updatedLocation, detectiveIndex, finalDestination);
-		while (!possibleLocation.contains(updatedLocation) || checkDuplicate) {
-			System.out.println("Your choice is not in the set or there is already a detective" + " at that location."
-					+ " Please select another one: ");
-			updatedLocation = sc.next();
-			checkDuplicate = checkDuplicatePosition(updatedLocation, detectiveIndex, finalDestination);
-		}
+	private String selectDetectivesDestination(final Set<String> possibleLocation, final int detectiveIndex,
+			final List<String> finalDestination) {
+		Set<String> NoDuplicateLocation = new HashSet<String>(possibleLocation);
+		NoDuplicateLocation.removeAll(getOtherDetectiveLocation(detectiveIndex));
+		String updatedLocation = ConsoleUtility.selectLocationfromSet(NoDuplicateLocation);
 		return updatedLocation;
 	}
 
@@ -50,8 +38,7 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 	protected final List<String> detectivesMove() {
 
 		rushUsed = new boolean[detectives.getDetectives().length];
-		List finalDestination = new ArrayList<String>();
-		Scanner sc = new Scanner(System.in);
+		List<String> finalDestination = new ArrayList<String>();
 		System.out.println("Detectives' turn: ");
 		Detective[] dts = detectives.getDetectives();
 		// for each detective
@@ -65,7 +52,7 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 			System.out.println("Select one from the options below: ");
 			System.out.println("\t 1- Stay or move 1 or 2 squares. ");
 			System.out.println("\t 2- Rush (Move 3 squares without investigation). ");
-			int choice = sc.nextInt();
+			int choice = ConsoleUtility.getIndexSelection(1, 2);
 			Set<String> adjacentLocation = GraphUtility.getAdjacentSquare(detectiveLocation, gb);
 			moveChoices.addAll(adjacentLocation);
 			// Makes 2 squares move.
@@ -79,7 +66,7 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 				Set<String> firstSquareSet = GraphUtility.getAdjacentSquare(detectiveLocation, gb);
 				Set<String> vertexInThreeMoves = new HashSet<String>();
 				for (String firstSquare : firstSquareSet) {
-					// get second levels
+					// get second level
 					Set<String> secondSquareSet = GraphUtility.getAdjacentSquare(firstSquare, gb);
 					// add all the first and second vertex to the set.
 					vertexInThreeMoves.addAll(secondSquareSet);
@@ -89,14 +76,13 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 						vertexInThreeMoves.addAll(thirdSquareSet);
 					}
 				}
-				// keep the third level and remove all other vertex from the
-				// set.
+				// keep the third level and remove all other vertex from the set.
 				// this is rush option of jack.
 				vertexInThreeMoves.removeAll(moveChoices);
 				moveChoices = vertexInThreeMoves;
 			}
 
-			String updatedLocation = selectDetectivesTargetedLocation(moveChoices, i, finalDestination);
+			String updatedLocation = selectDetectivesDestination(moveChoices, i, finalDestination);
 			// update the past move of the detective.
 			// set the detective location.
 			finalDestination.add(updatedLocation);
@@ -110,7 +96,6 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 
 		boolean caughtJack = false;
 		System.out.println("Investigation Starting......");
-		Scanner sc = new Scanner(System.in);
 		Detective[] detectivesList = detectives.getDetectives();
 		// get each detectives.
 		for (int i = 0; i < detectivesList.length; i++) {
@@ -119,23 +104,12 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 			// if the detective does not use rush, start investigate.
 			if (!rushUsed[i]) {
 				Set<String> adjacentCircles = GraphUtility.getAdjacentCircle(d.getLocation(), gb);
-				System.out.println("Enter s if you want" + " to search for clues or a to arrest:");
-				String s = sc.next();
-				if (s.equals("s")) {
-					System.out.println("You can search clues at: ");
-					for (String circle : adjacentCircles) {
-						System.out.print(circle + "  ");
-					}
-					System.out.println();
-					System.out.println("Please enter your" + " searching order from the list above ( q to end): ");
-					List<String> searchCluesOrder = new LinkedList<String>();
-					while (sc.hasNext()) {
-						String c = sc.next();
-						if (c.equals("q")) {
-							break;
-						}
-						searchCluesOrder.add(c);
-					}
+				System.out.println("Detective, do you want to search clues or arrest? ");
+				System.out.println("\t 1- Search for clues");
+				System.out.println("\t 2- Attempt to Arrest");
+				int choice = ConsoleUtility.getIndexSelection(1, 2);
+				if (choice == 1) {
+					List<String> searchCluesOrder = ConsoleUtility.getSearchCluesOrder(adjacentCircles);
 					boolean jackAnswerYes = false;
 					for (String circle : searchCluesOrder) {
 						if (jackAnswerYes) {
@@ -148,13 +122,9 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 							System.out.println("Jack has not been to " + circle);
 						}
 					}
-				} else if (s.equals("a")) {
-					System.out.println("Choose one of the following" + " circles to attempt arrest: ");
-					for (String circle : adjacentCircles) {
-						System.out.print(circle + "  ");
-					}
-					System.out.println();
-					String location = sc.next();
+				} else {
+					System.out.println("Attempt arrest: ");
+					String location =ConsoleUtility.selectLocationfromSet(adjacentCircles);
 					if (location.equals(jack.getCurrentLocation())) {
 						caughtJack = true;
 						System.out.println("You caught Jack! Mission accomplished. ");
@@ -170,17 +140,16 @@ public class DetectiveConsoleController extends AbstractDetectiveController {
 		return caughtJack;
 	}
 
-	private boolean checkDuplicatePosition(String destination, int detective, List finalDestination) {
-		if (finalDestination.contains(destination)) {
-			return true;
-		}
-		for (int i = detective + 1; i < detectives.getDetectives().length; i++) {
-			String detectiveLocation = detectives.getDetectives()[i].getLocation();
-			if (detectiveLocation == destination) {
-				return true;
+	private Set<String> getOtherDetectiveLocation(int detectiveIndex) {
+		Set<String> otherDetectiveLocation = new HashSet<String>();
+		Detective[] detectivesArray = detectives.getDetectives();
+		for (int i = 0; i < detectivesArray.length; i++) {
+			if( i == detectiveIndex) {
+				continue;
 			}
-		}
-		return false;
+			otherDetectiveLocation.add(detectivesArray[i].getLocation());
+			}
+		return otherDetectiveLocation;
 	}
 
 }

@@ -1,6 +1,9 @@
 package com.wingulabs.whitechapel.gameController;
 
-import java.util.Scanner;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.wingulabs.whitechapel.Utility.ConsoleUtility;
 
 /**
  * Control the flow of the game.
@@ -18,24 +21,15 @@ public class GameControllerConsole extends GameController {
 	}
 
 	/**
-	 * Ask user to choose hideout from the entire game.
+	 * Ask user to Select hideout from the entire game.
 	 * @return Jack's hideout.
 	 */
 	protected String hideOutGenerator() {
-		Scanner scan = new Scanner(System.in);
 		System.out.println("Jack is choosing his Hide Out: ");
-		System.out.println("Choose any circle except the red circles: ");
-		String hideOut = scan.next();
-		while (!super.getGb().getCircleGraph().containsVertex(hideOut)) {
-			System.out.println("Your choice is not a circle.");
-			System.out.println("Please choose a circle: ");
-			hideOut = scan.next();
-		}
-		while (super.getGb().RED_CIRCLES.contains(hideOut)) {
-			System.out.println("You chose the red circle.");
-			System.out.println("Please choose another circle: ");
-			hideOut = scan.next();
-		}
+		System.out.println("Select any circle except the red circles: ");
+		Set<String> CirclesExceptRed = new HashSet<String>(super.getGb().getCircleGraph().vertexSet());
+		CirclesExceptRed.removeAll(super.getGb().RED_CIRCLES);
+		String hideOut = ConsoleUtility.selectLocationfromSet(CirclesExceptRed);
 		return hideOut;
 	}
 }

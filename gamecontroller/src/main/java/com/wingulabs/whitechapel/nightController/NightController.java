@@ -1,13 +1,7 @@
 package com.wingulabs.whitechapel.nightController;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
-import org.jgrapht.graph.SimpleGraph;
-
 import com.wingulabs.whitechapel.detectives.Detectives;
-import com.wingulabs.whitechapel.gameBoard.Edge;
 import com.wingulabs.whitechapel.gameBoard.GameBoard;
 import com.wingulabs.whitechapel.jack.Jack;
 import com.wingulabs.whitechapel.night.Night;
@@ -75,6 +69,11 @@ public class NightController {
 						+ (int) (night.getCurrentNight() + 1) + " will start soon...");
 				return true;
 			}
+			if (turn == 15) {
+				System.out.println("Jack cannot reach his Hide Out in the night"
+						+ ". Game Over!");
+				return false;
+			}
 			List<String> detectivesUpdateLocation = detectiveController.detectivesMove();
 			for (int i = 0; i < detectives.getDetectives().length; i++) {
 				detectives.getDetectives()[i].setLocation(
@@ -83,11 +82,6 @@ public class NightController {
 			boolean caughtJack = detectiveController.investigation(jack);
 			if (caughtJack) {
 				System.out.println("Jack was caught by the detectives. Game Over!");
-				return false;
-			}
-			if (turn == 15) {
-				System.out.println("Jack cannot reach his hideOut in the night"
-						+ ". Game Over!");
 				return false;
 			}
 			System.out.println("Turn " + night.getCurrentTurn() + " ends. ");

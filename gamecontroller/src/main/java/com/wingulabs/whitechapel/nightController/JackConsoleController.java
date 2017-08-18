@@ -1,6 +1,5 @@
 package com.wingulabs.whitechapel.nightController;
 
-import java.util.Scanner;
 import java.util.Set;
 
 import org.jgrapht.graph.SimpleGraph;
@@ -24,9 +23,8 @@ public class JackConsoleController extends AbstractJackController {
 	 * @return destination.
 	 */
 	private String regularMove(final String source) {
-		Scanner sc = new Scanner(System.in);
 		Set<String> adjacentLocation = getJackAdjacentVertex(source);
-		String updatedLocation = ConsoleUtility.selectTargetedLocation(adjacentLocation);
+		String updatedLocation = ConsoleUtility.selectLocationfromSet(adjacentLocation);
 		return updatedLocation;
 	}
 	
@@ -36,17 +34,15 @@ public class JackConsoleController extends AbstractJackController {
 	 * @return destination.
 	 */
 	private String coachMove(final String source) {
-
-		//TODO Scanner sc = new Scanner(System.in);
 		Set<String> adjacentLocation =
 				getJackAdjacentVertex(source);
 		System.out.println("First move of Coach:");
-		String firstMoveLocation = ConsoleUtility.selectTargetedLocation(adjacentLocation);
+		String firstMoveLocation = ConsoleUtility.selectLocationfromSet(adjacentLocation);
 		jack.setCurrentLocation(firstMoveLocation);
 		adjacentLocation = getJackAdjacentVertex(firstMoveLocation);
 		//second move of coach
 		System.out.println("Second move of Coach:");
-		String secondMoveLocation = ConsoleUtility.selectTargetedLocation(adjacentLocation);
+		String secondMoveLocation = ConsoleUtility.selectLocationfromSet(adjacentLocation);
 		return secondMoveLocation;
 	}
 	
@@ -58,14 +54,13 @@ public class JackConsoleController extends AbstractJackController {
 	private String alleyMove(final String source) {
 		SimpleGraph<String, Edge> alleyGraph = gb.getAlleyCircleGraph();
 		Set<String> alleyMoveSet = GraphUtility.getAdjacentVertex(source, alleyGraph);
-		String updatedLocation = ConsoleUtility.selectTargetedLocation(alleyMoveSet);
+		String updatedLocation = ConsoleUtility.selectLocationfromSet(alleyMoveSet);
 		return updatedLocation;
 	}
 
 	@Override
 	protected final String jackMove() {
 		
-		Scanner sc = new Scanner(System.in);
 		System.out.println("Jack's turn: ");
 		System.out.println("Jack currently has "
 		+ jack.getCoachAlley()[0] + " coach tokens and "
@@ -75,17 +70,20 @@ public class JackConsoleController extends AbstractJackController {
 		System.out.println("\t 1- To make a normal move. ");
 		System.out.println("\t 2- To use coach special token. ");
 		System.out.println("\t 3- To use alley special token. ");
-		int choice = sc.nextInt();
+		int choice = ConsoleUtility.getIndexSelection(1, 3);
+
 		boolean check = false;
 		while (!check) {
 			if (choice == 2 && jack.getCoachAlley()[0] == 0) {
 				System.out.println("Jack has used all of the coach token "
 			+ " please select another move.");
-				choice = sc.nextInt();
+				choice = ConsoleUtility.getIndexSelection(1, 3);
 			} else if (choice == 3 && jack.getCoachAlley()[1] == 0) {
 				System.out.println("Jack has used all of the alley token "
 			+ " please select another move.");
-				choice = sc.nextInt();
+				choice = ConsoleUtility.getIndexSelection(1, 3);
+			} else if ( choice > 3 && choice < 1) {
+				
 			} else {
 				check = true;
 			}
@@ -101,7 +99,7 @@ public class JackConsoleController extends AbstractJackController {
 				jack.getCoachAlley()[1]--;
 				return alleyMove(jack.getCurrentLocation());
 			default:
-				return " You have entered the wrong choice";
+				return null;
 		}
 	}
 }
