@@ -1,5 +1,7 @@
 package com.wingulabs.whitechapel.Utility;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -10,6 +12,7 @@ import java.util.Set;
 
 public class ConsoleUtility {
 
+	private static Scanner sc;
 	/**
 	 * Get a location from a given set.
 	 * 
@@ -47,6 +50,7 @@ public class ConsoleUtility {
 				count = 0;
 			}
 		}
+		System.out.println();
 	}
 
 	private static Comparator<String> cmp = new Comparator<String>() {
@@ -58,6 +62,7 @@ public class ConsoleUtility {
 	};
 
 	public static int getIndexSelection(int lowerBound, int upperBound) {
+	//	Scanner sc = getInputScannerFromFile();
 		Scanner sc = new Scanner(System.in);
 		int locationIndex;
 		while (true)
@@ -84,5 +89,15 @@ public class ConsoleUtility {
 		}
 		return searchCluesOrder;
 	}
-
+	public static Scanner getInputScannerFromFile() {
+		if(sc == null) {
+			try {
+				sc = new Scanner(new File("tester_input.txt"));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return sc;
+	}
 }

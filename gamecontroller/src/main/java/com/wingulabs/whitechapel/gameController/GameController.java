@@ -52,8 +52,6 @@ public abstract class GameController {
 	 * Run and control the game flow.
 	 */
 	public final void run() {
-		Set<String> startingRedCircles = gb.RED_CIRCLES;
-		Set<String> startingSquare = gb.YELLOW_SQUARES;
 		Set<String> previousCrimeScene = new HashSet<String>();
 		Set<String> lastDetectivesLocation = new HashSet<String>(gb.YELLOW_SQUARES);
 		boolean gameContinue = true;
