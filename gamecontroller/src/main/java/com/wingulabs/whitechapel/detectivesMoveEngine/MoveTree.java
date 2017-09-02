@@ -85,10 +85,10 @@ public abstract class MoveTree extends DirectedAcyclicGraph<Vertex, Edge> {
 	/**
 	 * Updates this MoveTree by removing paths that Jack could not have
 	 * possibly taken based on result.
-	 *
+	 * Return True if Jack is caught.
 	 * @param result The result of a detective's questioning.
 	 */
-	public abstract void processDetectiveMoveResult(DetectiveMoveResult result);
+	public abstract boolean processDetectiveMoveResult(DetectiveMoveResult result);
 
 	/**
 	 * Models a vertex of a MoveTree.

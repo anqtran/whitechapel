@@ -19,6 +19,6 @@ public final class WhiteChapelSimulator {
 	 */
 	public static void main(final String[] args) {
 		GameControllerConsole gs = new GameControllerConsole();
-		gs.run();
+		gs.runSimpleNight();
 	}
 }

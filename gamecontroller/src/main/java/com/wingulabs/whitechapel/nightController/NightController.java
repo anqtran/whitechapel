@@ -52,6 +52,46 @@ public class NightController {
 		this.jackController = new JackConsoleController(gb,jack,night);
 		this.detectiveController = new DetectiveConsoleController(gb,detectives);	
 	}
+	public NightController(final Jack jack,
+			final Detectives detectives, final String hideOut) {
+		super();
+		this.jack = jack;
+		this.detectives = detectives;
+		this.hideOut = hideOut;
+		this.jackController = new JackConsoleController(gb,jack,night);
+		this.detectiveController = new DetectiveEngineController(gb,detectives, jack.getCurrentLocation());	
+	}
+	public final boolean simpleRun() {
+		System.out.println("Night 1 begins!!! ");
+		int turn = 1;
+		while (turn < 15) {
+			turn++;
+			System.out.println("Turn " + turn);
+			String jackMove = jackController.jackMove();
+			jack.setCurrentLocation(jackMove);
+			if (jack.getCurrentLocation().equals(hideOut)) {
+				System.out.println("Jack got to his hide out");
+				return true;
+			}
+			if (turn == 15) {
+				System.out.println("Jack cannot reach his Hide Out in the night"
+						+ ". Game Over!");
+				return false;
+			}
+			List<String> detectivesUpdateLocation = detectiveController.detectivesMove();
+			for (int i = 0; i < detectives.getDetectives().length; i++) {
+				detectives.getDetectives()[i].setLocation(
+						detectivesUpdateLocation.get(i));
+			}
+			boolean caughtJack = detectiveController.investigation(jack);
+			if (caughtJack) {
+				System.out.println("Jack was caught by the detectives. Game Over!");
+				return false;
+			}
+			System.out.println("Turn "+ turn + " ends. ");
+		}
+		return false;
+	}
 	/**
 	 * Start the night.
 	 * @return true if jack successfully reaches the hideout.

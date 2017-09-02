@@ -43,6 +43,12 @@ public class GameBoard {
 			"alley_edges.txt";
 
 	/**
+	 * The graph containing all edges (to/from squares and circles)
+	 */
+	private final SimpleGraph<String, Edge> completeGraph =
+			new SimpleGraph<>(Edge.class);
+	
+	/**
 	 * The graph containing square-to-square edges.
 	 */
 	private final SimpleGraph<String, Edge> squareGraph =
@@ -113,6 +119,8 @@ public class GameBoard {
 	 */
 	protected GameBoard() throws IOException {
 		init();
+		initCompleteGraph();
+		
 	}
 
 	/**
@@ -183,6 +191,34 @@ public class GameBoard {
 		initAlleyCircleGraph();
 
 	}
+	
+	private void initCompleteGraph() throws IOException {
+		try (BufferedReader rdr = new BufferedReader(new InputStreamReader(
+				getClass().getClassLoader().
+				getResource(PRIMARY_EDGES_FILEPATH).openStream()))) {
+
+			String line = null;
+			while ((line = rdr.readLine()) != null) {
+				//System.out.println(line);
+				if (line.isEmpty())
+					continue;
+				if (line.startsWith("#"))
+					continue;
+				String[] edgeParts = line.split(":");
+				if (edgeParts.length != 2) {
+					throw new RuntimeException("Invalid line in edges.txt: " + line);
+				}
+
+				String vertex1 = edgeParts[0];
+				String vertex2 = edgeParts[1];
+				
+				completeGraph.addVertex(vertex1);
+				completeGraph.addVertex(vertex2);
+				completeGraph.addEdge(vertex1, vertex2);
+			}
+		}
+	}
+	
 	/**
 	 * Reads the data files and process the graph.
 	 * @throws IOException If an error ocurrs throw exception.
@@ -315,5 +351,10 @@ public class GameBoard {
 	public final SimpleGraph<String, Edge> getAlleyCircleGraph() {
 		return alleyCircleGraph;
 	}
+
+	public SimpleGraph<String, Edge> getCompleteGraph() {
+		return completeGraph;
+	}
+	
 
 }

@@ -1,11 +1,13 @@
 package com.wingulabs.whitechapel.gameController;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import com.wingulabs.whitechapel.Utility.ConsoleUtility;
 import com.wingulabs.whitechapel.detectives.Detective;
 import com.wingulabs.whitechapel.detectives.Detectives;
 import com.wingulabs.whitechapel.detectives.Detective.DetectiveColor;
@@ -46,7 +48,7 @@ public abstract class GameController {
 		add(DetectiveColor.BROWN);
 		add(DetectiveColor.YELLOW);
 		}};
-		this.hideOut = hideOutGenerator();
+		//this.hideOut = hideOutGenerator();
 	}
 	/**
 	 * Run and control the game flow.
@@ -70,7 +72,23 @@ public abstract class GameController {
 			System.out.println("Congratulations Detectives!");
 		}
 	}
-
+	public final void runSimpleNight() {
+		Detectives dt = new Detectives();
+		List<String> detectivesLocations = new ArrayList<String>(gb.YELLOW_SQUARES);
+		detectivesLocations.remove("SC101S1");
+		detectivesLocations.remove("SC130S1");
+	
+		Detective[] dts = dt.getDetectives();
+		for (int i = 0; i < dts.length; i++) {
+			String location = detectivesLocations.get(i);
+			System.out.println(dts[i].getColor() + " detective is at: " + location);
+			dts[i].setLocation(location);
+		}
+		Jack jack = new Jack(new int[]{0,0},"C65");
+		nightController = new NightController(jack,
+				dt, "C66");
+		boolean jackReachesHideOut = nightController.simpleRun();
+	}
 	/**
 	 * Run the night of the game.
 	 * @param lastLocation the set of last locations
