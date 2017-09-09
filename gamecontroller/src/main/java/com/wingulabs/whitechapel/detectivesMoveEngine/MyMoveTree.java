@@ -35,6 +35,9 @@ public class MyMoveTree extends MoveTree {
 	@Override
 	public final void processJackMove(final Detectives detectives) {
 		updateLeaves(getLeaves(), detectives);
+		for(Vertex v :getLeaves()) {
+			System.out.println(v.getLabel());
+		}
 
 	}
 
@@ -72,109 +75,79 @@ public class MyMoveTree extends MoveTree {
 	/** change the map according to the result of a detective's move.
 	 *
 	 */
-	@Override
-	public final boolean processDetectiveMoveResult(
-			final DetectiveMoveResult result) {
+	
+	public final boolean processDetectiveMoveResultTester(String checkVertex, Answer clueAnswer) {
 		// If the action is search clues
-		if (result instanceof SearchCluesResult) {
-			Map<String, Answer> resultList =
-							((SearchCluesResult) result).getClueAnswers(); //get answer list
-			for (Map.Entry<String, Answer> clues : resultList.entrySet()) { // For each of the answer in the list
-				String checkVertex = clues.getKey(); // get vertex and answer in each element
-				Answer clueAnswer = clues.getValue();
 				switch (clueAnswer) {
 				case YES: // if answer is yes
-					removeVertexYes();
+					removeVertexYes(checkVertex);
 					break;
 				case NO: // if the answer is no
-					removeVertexNo();
+					removeVertexNo(checkVertex);
 					break;
 				}
-			}
-			return false;
-		}
-		// if the action is attempt arrest
-		else {
-			String attemptedCircle = ((AttemptArrestResult) result).
-									getMove().getTargetCircle();
-			// if the answer is yes, end game
-			if (((AttemptArrestResult) result).getAnswer()) {
-					return true;
-			} else {
-				System.out.println("Remove all the leaf vertex that contains "
-									+ attemptedCircle);
-				getLeaves().remove(attemptedCircle);
-				return false;
-					}
-				}
-			}
+				return true;
+	}
+
 	/**
 	 * if the answer is yes, remove all the path that
-	 * does not contains the targerted vertex. ( We am still working on this.)
+	 * does not contains the targeted vertex. 
 	 * @param currentRoot The crimescene.
 	 * @param vertexToNotRemove vertex kept in the tree.
 	 * @param vertexToRemove vertex to remove.
 	 */
-	public final void removeVertexYes(final Vertex currentVertex, Set<Vertex> leaves, String askedVertex,boolean remove) {
-			if (currentVertex.equals(root)) {
+	public final void removeVertexYes(String askedVertex) {
+		removeVertexYesHelper(root, askedVertex);
+		}
+
+	private final void removeVertexYesHelper(final Vertex currentV, String askedVertex) {
+			if(currentV.getLabel().equals(askedVertex)) {
 				return;
 			}
-			if(currentVertex.getLabel().equals(askedVertex)) {
+			if(outgoingEdgesOf(currentV).size() == 0) {
+				removeVertex(currentV);
 				return;
 			}
-			vertexToRemove.add(currentRoot); // add vertex to the set.
-			Iterator descendantIter = getDescendants(this, currentRoot).iterator();
-			// Since the getdescendants return a set,
-			//we need to iterate through the set to get the descendant's element.
-			while (descendantIter.hasNext()) {
-			removeVertexYes((Vertex) descendantIter.next(),
-							vertexToNotRemove, vertexToRemove);
+			Set<Edge> edges = edgesOf(currentV);
+			for (Edge edge : edges) {
+				Vertex connectedV = edge.getConnectedVertex(currentV);
+				removeVertexYesHelper(connectedV, askedVertex);
+				if(outgoingEdgesOf(currentV).size() == 0) {
+					return;
+				}
 			}
-			for (Vertex v : vertexToRemove) {
-				removeVertex(v);
-			}
-			getLeaves().removeAll(vertexToRemove);
 	}
-	public final void removeBranch(Vertex root) { 
-		Set<Edge> edges = this.edgesOf(root);
-		if(edges.size() == 0) {
-			
-		}
-		for( Edge e : edges) {
-			Vertex v = e.getConnectedVertex(root);
-			
-		}
-		
-	}
-
-
 	/**
 	 * Remove Vertex at a specific location in the tree (used for NO Answer).
 	 * @param currentRoot current vertex.
 	 * @param vertextoRemove vertex to remove.
 	 * @param leavesRemove leaves to remove.
 	 */
-	private void removeVertexNo(final Vertex currentRoot,
-			final String vertextoRemove, final Set<Vertex> leavesRemove) {
-		// Remove currentRoot vertex from the tree if it matches with the
-		// removeVertex.
-		if (currentRoot.getLabel().equals(vertextoRemove)
-				&& !currentRoot.equals(root)) {
-			// Remove vertex from the leaves set
-			if (getLeaves().contains(currentRoot)) {
-				getLeaves().remove(currentRoot);
+	public final void removeVertexNo(String askedVertex) {
+		removeVertexYesHelper(root, askedVertex);
+		}
+
+	private final void removeVertexNoHelper(final Vertex currentV, String askedVertex) {
+			if(currentV.getLabel().equals(askedVertex)) {
+				removeVertex(currentV);
+				return;
 			}
-			// Remove vertex from the map.
-			removeVertex(currentRoot);
-			return;
-		}
-		if (getDescendants(this, currentRoot) == null) {
-			return;
-		}
-		Iterator connectedIter = getDescendants(this, currentRoot).iterator();
-		while (connectedIter.hasNext()) {
-			Vertex nextVertex = (Vertex) connectedIter.next();
-			removeVertexNo(nextVertex, vertextoRemove, leavesRemove);
-		}
+			if(outgoingEdgesOf(currentV).size() == 0) {
+				return;
+			}
+			Set<Edge> edges = edgesOf(currentV);
+			for (Edge edge : edges) {
+				Vertex connectedV = edge.getConnectedVertex(currentV);
+				removeVertexYesHelper(connectedV, askedVertex);
+				if(outgoingEdgesOf(currentV).size() == 0) {
+					return;
+				}
+			}
+	}
+
+	@Override
+	public boolean processDetectiveMoveResult(DetectiveMoveResult result) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
