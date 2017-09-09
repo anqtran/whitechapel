@@ -104,17 +104,20 @@ public class MyMoveTree extends MoveTree {
 			if(currentV.getLabel().equals(askedVertex)) {
 				return;
 			}
+			/*
 			if(outgoingEdgesOf(currentV).size() == 0) {
 				removeVertex(currentV);
 				return;
 			}
-			Set<Edge> edges = edgesOf(currentV);
+			*/
+			Set<Edge> edges = outgoingEdgesOf(currentV);
 			for (Edge edge : edges) {
 				Vertex connectedV = edge.getConnectedVertex(currentV);
 				removeVertexYesHelper(connectedV, askedVertex);
-				if(outgoingEdgesOf(currentV).size() == 0) {
-					return;
-				}
+			}
+			if(outgoingEdgesOf(currentV).size() == 0) {
+				removeVertex(currentV);
+				return;
 			}
 	}
 	/**
