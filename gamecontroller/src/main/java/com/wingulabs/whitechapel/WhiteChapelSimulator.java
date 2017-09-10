@@ -39,6 +39,7 @@ public final class WhiteChapelSimulator {
 		Detectives dt = initDetectives();
 		mt.processJackMove(dt);
 		mt.processDetectiveMoveResultTester("C66", Answer.YES);
+		
 		// GameControllerConsole gs = new GameControllerConsole();
 		// gs.runSimpleNight();
 	}

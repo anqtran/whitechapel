@@ -150,4 +150,12 @@ public class MyMoveTree extends MoveTree {
 		// TODO Auto-generated method stub
 		return false;
 	}
+	public void printTree(){
+		Set<Edge> edges = edgesOf(root);
+		for (Edge edge : edges) {
+			Vertex connectedV = edge.getConnectedVertex(root);
+			
+		}
+		}
+	}
 }
