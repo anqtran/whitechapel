@@ -25,7 +25,7 @@ public class MyMoveTreeTester {
 		expectedTree.addVertex(v1C3);
 		expectedTree.addEdge(expectedTree.getRoot(), v1C3);
 
-		testTree.removeVertexNo("C2");
+		testTree.removeVertexYes("C2");
 		
 		assert testTree.equals(expectedTree);
 	}
