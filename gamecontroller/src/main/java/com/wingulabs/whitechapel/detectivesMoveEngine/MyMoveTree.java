@@ -110,25 +110,34 @@ public class MyMoveTree extends MoveTree {
 	 *            vertex to remove.
 	 */
 	public final void removeVertexYes(String askedVertex) {
-		removeVertexYesHelper(root, askedVertex);
+		boolean removeRoot = removeVertexYesHelper(root, askedVertex);
+		if (removeRoot) {
+			System.out.println("Jack is at " + root);
+		}
 	}
 
-	private final void removeVertexYesHelper(final Vertex currentV, String askedVertex) {
+	private final boolean removeVertexYesHelper(final Vertex currentV, String askedVertex) {
 		if (currentV.getLabel().equals(askedVertex)) {
-			return;
+			return false;
 		}
+		Set<Vertex> toRemove = new HashSet<>();
 		Set<Edge> edges = outgoingEdgesOf(currentV);
-		Iterator iter = edges.iterator();
+		Iterator<Edge> iter = edges.iterator();
 		while (iter.hasNext()) {
-			Edge edge = (Edge) iter.next();
+			Edge edge = iter.next();
 			Vertex connectedV = edge.getConnectedVertex(currentV);
 			System.out.println(connectedV.getLabel());
-			removeVertexYesHelper(connectedV, askedVertex);
+			if (removeVertexYesHelper(connectedV, askedVertex)) {
+				toRemove.add(connectedV);
+			}
+		}
+		for(Vertex v : toRemove) {
+			removeVertex(v);
 		}
 		if (outgoingEdgesOf(currentV).size() == 0) {
-			removeVertex(currentV);
-			return;
+			return true;
 		}
+		return false;
 	}
 
 	/**
