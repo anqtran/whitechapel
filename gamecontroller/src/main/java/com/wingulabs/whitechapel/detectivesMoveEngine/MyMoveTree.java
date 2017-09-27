@@ -2,18 +2,11 @@ package com.wingulabs.whitechapel.detectivesMoveEngine;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
-import org.jgrapht.alg.shortestpath.DijkstraShortestPath;
-
 import com.wingulabs.whitechapel.Utility.GraphUtility;
-import com.wingulabs.whitechapel.detectives.Detective;
 import com.wingulabs.whitechapel.detectives.DetectiveMoveResult;
 import com.wingulabs.whitechapel.detectives.Detectives;
-import com.wingulabs.whitechapel.detectives.DetectiveMoveResult.AttemptArrestResult;
-import com.wingulabs.whitechapel.detectives.DetectiveMoveResult.SearchCluesResult;
 import com.wingulabs.whitechapel.gameBoard.Answer;
 import com.wingulabs.whitechapel.gameBoard.Edge;
 import com.wingulabs.whitechapel.gameBoard.GameBoard;
@@ -28,10 +21,8 @@ public class MyMoveTree extends MoveTree {
 	/**
 	 * Constructor.
 	 * 
-	 * @param gameboard
-	 *            GameBoard from the library.
-	 * @param rootLabel
-	 *            CrimeScene.
+	 * @param gameboard GameBoard from the library.
+	 * @param rootLabel CrimeScene.
 	 */
 	public MyMoveTree(final GameBoard gameboard, final String rootLabel) {
 		super(gameboard, rootLabel);
@@ -39,45 +30,36 @@ public class MyMoveTree extends MoveTree {
 
 	@Override
 	public final void processJackMove(final Detectives detectives) {
-		updateLeaves(getLeaves(), detectives);
-		for (Vertex v : getLeaves()) {
-			System.out.println(v.getLabel());
-		}
-
+		System.out.println("JACK MOVE!!!");
+		updateLeaves(detectives);
 	}
 
 	/**
 	 * For each element in leaves set, find connected vertex, create an edge
 	 * between two and add the new vertex to the leaves set.
 	 *
-	 * @param currentLeaves
-	 *            current leaves set.
-	 * @param detectives
-	 *            detectives.
+	 * @param currentLeaves current leaves set.
+	 * @param detectives  detectives.
 	 */
-	private void updateLeaves(final Set currentLeaves, final Detectives detectives) {
-		Set<Vertex> oldLeaves = new HashSet<>(currentLeaves);
+	private void updateLeaves(final Detectives detectives) {
+		Set<Vertex> currentLeaves = new HashSet<>(this.leaves);
 		// Clear the leave set
-		currentLeaves.clear();
+		leaves.clear();
 		// For each element in the set
-		for (Vertex currentLeaf : oldLeaves) {
+		for (Vertex currentLeaf : currentLeaves) {
 			Set<String> newLeaves = GraphUtility.whereCanJackGo(currentLeaf.getLabel(), detectives, gameboard);
 			connectDestinationsToOrigin(currentLeaf, newLeaves);
-			Set<Vertex> leavesVertex = new HashSet<Vertex>();
-			for (String location : newLeaves) {
-				leavesVertex.add(new Vertex(location));
-			}
-			getLeaves().addAll(leavesVertex);
 		}
-		System.out.println("------------");
 	}
 
 	private void connectDestinationsToOrigin(Vertex Origin, Set<String> Destinations) {
 		for (String destinationLabel : Destinations) {
 			Vertex destinationVertex = new Vertex(destinationLabel);
 			addVertex(destinationVertex);
+			leaves.add(destinationVertex);
 			addEdge(Origin, destinationVertex);
 		}
+		
 	}
 
 	/**
@@ -87,6 +69,9 @@ public class MyMoveTree extends MoveTree {
 
 	public final boolean processDetectiveMoveResultTester(String checkVertex, Answer clueAnswer) {
 		// If the action is search clues
+		if(!vertexIsInGraph(checkVertex)) {
+			return false;
+		}
 		switch (clueAnswer) {
 		case YES: // if answer is yes
 			removeVertexYes(checkVertex);
@@ -95,19 +80,16 @@ public class MyMoveTree extends MoveTree {
 			removeVertexNo(checkVertex);
 			break;
 		}
-		return true;
+		return false;
 	}
 
 	/**
 	 * if the answer is yes, remove all the path that does not contains the
 	 * targeted vertex.
 	 * 
-	 * @param currentRoot
-	 *            The crimescene.
-	 * @param vertexToNotRemove
-	 *            vertex kept in the tree.
-	 * @param vertexToRemove
-	 *            vertex to remove.
+	 * @param currentRoot The crimescene.
+	 * @param vertexToNotRemove vertex kept in the tree.
+	 * @param vertexToRemove  vertex to remove.
 	 */
 	public final void removeVertexYes(String askedVertex) {
 		boolean removeRoot = removeVertexYesHelper(root, askedVertex);
@@ -115,9 +97,18 @@ public class MyMoveTree extends MoveTree {
 			System.out.println("Jack is at " + root);
 		}
 	}
-
+	private final boolean vertexIsInGraph(String askedVertex) {
+		for(Vertex v : this.vertexSet()) {
+			if(v.getLabel().equals(askedVertex)){
+				return true;
+			}
+		}
+		return false;
+	}
 	private final boolean removeVertexYesHelper(final Vertex currentV, String askedVertex) {
+		
 		if (currentV.getLabel().equals(askedVertex)) {
+			currentV.setFoundClues(true);
 			return false;
 		}
 		Set<Vertex> toRemove = new HashSet<>();
@@ -126,47 +117,53 @@ public class MyMoveTree extends MoveTree {
 		while (iter.hasNext()) {
 			Edge edge = iter.next();
 			Vertex connectedV = edge.getConnectedVertex(currentV);
-			System.out.println(connectedV.getLabel());
 			if (removeVertexYesHelper(connectedV, askedVertex)) {
 				toRemove.add(connectedV);
 			}
 		}
-		for(Vertex v : toRemove) {
-			removeVertex(v);
-		}
 		if (outgoingEdgesOf(currentV).size() == 0) {
 			return true;
 		}
+		for(Vertex v : toRemove) {
+			removeVertex(v); 
+		}
+		leaves.removeAll(toRemove);
 		return false;
 	}
 
 	/**
 	 * Remove Vertex at a specific location in the tree (used for NO Answer).
-	 * 
-	 * @param currentRoot
-	 *            current vertex.
-	 * @param vertextoRemove
-	 *            vertex to remove.
-	 * @param leavesRemove
-	 *            leaves to remove.
+	 * @param currentRoot current vertex.
+	 * @param vertextoRemove vertex to remove.
+	 * @param leavesRemove leaves to remove.
 	 */
 	public final void removeVertexNo(String askedVertex) {
 		removeVertexNoHelper(root, askedVertex);
 	}
 
-	private final void removeVertexNoHelper(final Vertex currentV, String askedVertex) {
+	private final boolean removeVertexNoHelper(final Vertex currentV, String askedVertex) {
 		if (currentV.getLabel().equals(askedVertex)) {
-			removeVertex(currentV);
-			return;
+			currentV.setFoundClues(false);
+			return true;
 		}
-		Set<Edge> edges = edgesOf(currentV); 
-		for (Edge edge : edges) {
+		Set<Vertex> toRemove = new HashSet<>();
+		Set<Edge> edges = outgoingEdgesOf(currentV);
+		Iterator<Edge> iter = edges.iterator();
+		while (iter.hasNext()) {
+			Edge edge = iter.next();
 			Vertex connectedV = edge.getConnectedVertex(currentV);
-			removeVertexNoHelper(connectedV, askedVertex);
+			if (removeVertexNoHelper(connectedV, askedVertex)) {
+				toRemove.add(connectedV);
+			}
 		}
 		if (outgoingEdgesOf(currentV).size() == 0) {
-			return;
+			return false;
+		} 
+		for(Vertex v : toRemove) {
+			removeVertex(v);
 		}
+		leaves.removeAll(toRemove);
+		return false;
 	}
 
 	@Override
@@ -175,11 +172,22 @@ public class MyMoveTree extends MoveTree {
 		return false;
 	}
 
-	public void printTree() {
-		Set<Edge> edges = edgesOf(root);
-		for (Edge edge : edges) {
-			Vertex connectedV = edge.getConnectedVertex(root);
-
+	public void printTree(Vertex root) {
+		System.out.println("Testing");
+		System.out.println(root.getLabel());
+		System.out.println(outgoingEdgesOf(root).size());
+		if(outgoingEdgesOf(root).size() == 0) {
+			System.out.println("Testing");
+			return;
 		}
+		for(Edge e : outgoingEdgesOf(root)) {
+			System.out.println("k");
+			Vertex v = e.getConnectedVertex(root);
+			System.out.print(v.getLabel() + " ");
+			
+			printTree(v);
+		}
+		System.out.println();
 	}
+
 }

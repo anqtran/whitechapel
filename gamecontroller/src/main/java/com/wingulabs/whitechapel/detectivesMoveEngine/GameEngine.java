@@ -1,5 +1,7 @@
 package com.wingulabs.whitechapel.detectivesMoveEngine;
 
+import java.util.List;
+
 import com.wingulabs.whitechapel.detectives.DetectiveMove;
 import com.wingulabs.whitechapel.detectives.Detectives;
 
@@ -33,5 +35,9 @@ public interface GameEngine {
 	 */
 	DetectiveMove getMove(Detectives loc, MoveTree moveTree,
 			int detectiveIndex);
-
+	/**
+	 * Get all of the moves of detectives in one turn.
+	 * return a list of Detective Moves.
+	 */
+	List<DetectiveMove> setDetectiveMoves(Detectives dts, MoveTree mt);
 }

@@ -3,13 +3,16 @@ package com.wingulabs.whitechapel;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.wingulabs.whitechapel.detectives.Detective;
 import com.wingulabs.whitechapel.detectives.DetectiveMove;
 import com.wingulabs.whitechapel.detectives.Detectives;
 import com.wingulabs.whitechapel.detectivesMoveEngine.MoveTree;
 import com.wingulabs.whitechapel.detectivesMoveEngine.MyMoveTree;
+import com.wingulabs.whitechapel.detectivesMoveEngine.MoveTree.Vertex;
 import com.wingulabs.whitechapel.gameBoard.Answer;
+import com.wingulabs.whitechapel.gameBoard.Edge;
 import com.wingulabs.whitechapel.gameBoard.GameBoard;
 import com.wingulabs.whitechapel.gameController.GameControllerConsole;
 
@@ -35,11 +38,12 @@ public final class WhiteChapelSimulator {
 	public static void main(final String[] args) {
 		GameBoard gb = GameBoard.SINGLETON;
 		MyMoveTree mt = new MyMoveTree(gb, "C65");
-
 		Detectives dt = initDetectives();
 		mt.processJackMove(dt);
-		mt.processDetectiveMoveResultTester("C66", Answer.YES);
-		
+		mt.processDetectiveMoveResultTester("C66", Answer.NO);
+		mt.processJackMove(dt);
+		mt.processDetectiveMoveResultTester("C66", Answer.NO);
+
 		// GameControllerConsole gs = new GameControllerConsole();
 		// gs.runSimpleNight();
 	}

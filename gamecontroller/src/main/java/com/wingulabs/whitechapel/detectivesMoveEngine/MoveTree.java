@@ -53,7 +53,6 @@ public abstract class MoveTree extends DirectedAcyclicGraph<Vertex, Edge> {
 		leaves.add(root);
 		root.foundClues = true;
 	}
-
 	/**
 	 * Returns the leaves.
 	 * @return the leaves.
