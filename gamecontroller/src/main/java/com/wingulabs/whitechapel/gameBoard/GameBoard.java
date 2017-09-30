@@ -41,7 +41,7 @@ public class GameBoard {
 	 */
 	public static final String ALLEY_CIRCLE_TO_CIRCLE_FILEPATH =
 			"alley_edges.txt";
-
+	
 	/**
 	 * The graph containing all edges (to/from squares and circles)
 	 */
