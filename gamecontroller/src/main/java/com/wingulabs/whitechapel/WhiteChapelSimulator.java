@@ -36,24 +36,24 @@ public final class WhiteChapelSimulator {
 	public static void main(final String[] args) throws IOException {
 		GameBoard gb = GameBoard.SINGLETON;
 		DetectivesEngineUtility dUtility = new DetectivesEngineUtility();
-//		System.out.println(dPath.getDistance("SC186E1", "SC31W1S1"));
-		MyMoveTree mt = new MyMoveTree(gb, "C65");
-		Detectives dt = initDetectives();
-		mt.processJackMove(dt);
+		System.out.println(dUtility.getDistance("SC186E1", "SC31W1S1"));
+//		MyMoveTree mt = new MyMoveTree(gb, "C65");
+//		Detectives dt = initDetectives();
+//		mt.processJackMove(dt);
 //		mt.processDetectiveMoveResultTester("C66", Answer.NO);
-		mt.processJackMove(dt);
-		mt.processJackMove(dt);
-		mt.processJackMove(dt);
-		mt.processJackMove(dt);
-		MyGameEngine ge = new MyGameEngine(mt);
-		Map<String,Integer> m = ge.vertexFrequencies();
-		for(String s : m.keySet()) {
-			System.out.println(s + " " + m.get(s));
-		}
-		NavigableSet<String> sortedFq = dUtility.getSortedSet(m);
-		System.out.println(sortedFq.pollLast());
-		System.out.println(sortedFq.pollLast());
-		System.out.println(sortedFq.pollLast());
+//		mt.processJackMove(dt);
+//		mt.processJackMove(dt);
+//		mt.processJackMove(dt);
+//		mt.processJackMove(dt);
+//		MyGameEngine ge = new MyGameEngine(mt);
+//		Map<String,Integer> m = ge.vertexFrequencies();
+//		for(String s : m.keySet()) {
+//			System.out.println(s + " " + m.get(s));
+//		}
+//		NavigableSet<String> sortedFq = dUtility.getSortedSet(m);
+//		System.out.println(sortedFq.pollLast());
+//		System.out.println(sortedFq.pollLast());
+//		System.out.println(sortedFq.pollLast());
 		
 //		mt.processDetectiveMoveResultTester("C66", Answer.NO);
 
