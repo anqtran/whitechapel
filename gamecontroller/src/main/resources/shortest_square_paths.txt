@@ -158,7 +158,7 @@ Destination:SC159S1E1.Distance:15.Previous:SC159S1
 Destination:SC80S1.Distance:5.Previous:SC78E1
 Destination:SC1W1.Distance:1.Previous:SC1E1
 Destination:SC17E1.Distance:7.Previous:SC5E3
-Destination:SC1W2.Distance:2.Previous:SC1W1
+Destination:.Distance:2.Previous:SC1W1
 Destination:SC1W3.Distance:3.Previous:SC1W2
 Destination:SC1W3.Distance:3.Previous:SC6S1
 Destination:SC150S1E1.Distance:9.Previous:SC116S2E2

@@ -1,20 +1,17 @@
 package com.wingulabs.whitechapel;
 
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.NavigableSet;
 
+import com.wingulabs.whitechapel.Utility.DetectivesEngineUtility;
 import com.wingulabs.whitechapel.detectives.Detective;
-import com.wingulabs.whitechapel.detectives.DetectiveMove;
 import com.wingulabs.whitechapel.detectives.Detectives;
-import com.wingulabs.whitechapel.detectivesMoveEngine.MoveTree;
+import com.wingulabs.whitechapel.detectivesMoveEngine.MyGameEngine;
 import com.wingulabs.whitechapel.detectivesMoveEngine.MyMoveTree;
-import com.wingulabs.whitechapel.detectivesMoveEngine.MoveTree.Vertex;
-import com.wingulabs.whitechapel.gameBoard.Answer;
-import com.wingulabs.whitechapel.gameBoard.Edge;
 import com.wingulabs.whitechapel.gameBoard.GameBoard;
-import com.wingulabs.whitechapel.gameController.GameControllerConsole;
 
 /**
  * Class starts the game.
@@ -33,16 +30,32 @@ public final class WhiteChapelSimulator {
 	 * Main class to start the game.
 	 * 
 	 * @param args
-	 * **
+	 * *
+	 * @throws IOException *
 	 */
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws IOException {
 		GameBoard gb = GameBoard.SINGLETON;
+		DetectivesEngineUtility dUtility = new DetectivesEngineUtility();
+//		System.out.println(dPath.getDistance("SC186E1", "SC31W1S1"));
 		MyMoveTree mt = new MyMoveTree(gb, "C65");
 		Detectives dt = initDetectives();
 		mt.processJackMove(dt);
-		mt.processDetectiveMoveResultTester("C66", Answer.NO);
+//		mt.processDetectiveMoveResultTester("C66", Answer.NO);
 		mt.processJackMove(dt);
-		mt.processDetectiveMoveResultTester("C66", Answer.NO);
+		mt.processJackMove(dt);
+		mt.processJackMove(dt);
+		mt.processJackMove(dt);
+		MyGameEngine ge = new MyGameEngine(mt);
+		Map<String,Integer> m = ge.vertexFrequencies();
+		for(String s : m.keySet()) {
+			System.out.println(s + " " + m.get(s));
+		}
+		NavigableSet<String> sortedFq = dUtility.getSortedSet(m);
+		System.out.println(sortedFq.pollLast());
+		System.out.println(sortedFq.pollLast());
+		System.out.println(sortedFq.pollLast());
+		
+//		mt.processDetectiveMoveResultTester("C66", Answer.NO);
 
 		// GameControllerConsole gs = new GameControllerConsole();
 		// gs.runSimpleNight();
