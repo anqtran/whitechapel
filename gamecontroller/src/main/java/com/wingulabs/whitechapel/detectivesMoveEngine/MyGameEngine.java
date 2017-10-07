@@ -35,6 +35,9 @@ public class MyGameEngine implements GameEngine {
 								final MoveTree moveTree, final int detectiveIndex) {
 		Detective dt = loc.getDetectives()[detectiveIndex];
 		
+		// get vertex from move tree with highest frequency == priority vertex
+		// get shortest path from dt location to priority vertex
+		
 		return null;
 		
 	}

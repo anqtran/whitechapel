@@ -29,18 +29,12 @@ public class DetectivesEngineUtility {
 				getClass().getClassLoader().getResource(SHORTEST_SQUARE_PATH).openStream()))) {
 			String line = null;
 			while((line = rdr.readLine()) != null) {
-				System.out.println(line);
+				//System.out.println(line);
 				if (line.isEmpty())
 					continue;
 				if(line.charAt(0) == 'S' && line.substring(19, line.length()).equals(origin)) {
 					line = rdr.readLine();
-					Scanner sc = new Scanner(line);
-					sc.useDelimiter("\\.");
-					String[] distanceParts = new String[3];
-					for(int i = 0; i < 3;i++) {
-						distanceParts[i] = sc.next();
-						System.out.println(distanceParts[i]);
-					}
+					String[] distanceParts = line.split("\\.");
 					System.out.println(distanceParts[0].substring(distanceParts[0].indexOf('S'),
 							distanceParts[0].length()));
 					System.out.println(destination);
