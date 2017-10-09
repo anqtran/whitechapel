@@ -1,11 +1,13 @@
 package com.wingulabs.whitechapel.detectivesMoveEngine;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.wingulabs.whitechapel.Utility.DetectivesEngineUtility;
 import com.wingulabs.whitechapel.detectives.Detective;
 import com.wingulabs.whitechapel.detectives.DetectiveMove;
 import com.wingulabs.whitechapel.detectives.Detectives;
@@ -19,14 +21,26 @@ import com.wingulabs.whitechapel.gameBoard.Edge;
  */
 public class MyGameEngine implements GameEngine {
 
-	private MoveTree mt;
+	private MoveTree moveTree;
+	private DetectivesEngineUtility dUtility;
+	private Detectives dt;
 	private boolean[] setMove = new boolean[5];
-	public MyGameEngine(MoveTree mt) {
-		this.mt = mt;
+	public MyGameEngine(MoveTree mt,Detectives dt) {
+		this.moveTree = mt;
+		this.dt = dt;
+		dUtility = new DetectivesEngineUtility(mt);
 	}
 	@Override
-	public final String getPriorityVertex(final Detectives loc,
-											final MoveTree moveTree) {
+	public final String getPriorityVertex(final Detectives loc, final MoveTree moveTree) {
+		
+		String s  = dUtility.getMostFrequentVertex();
+		try {
+			System.out.println(dUtility.getClosestDetective(dt, s)[0]);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return null;
 		
 	}
@@ -34,7 +48,7 @@ public class MyGameEngine implements GameEngine {
 	public final DetectiveMove getMove(final Detectives loc,
 								final MoveTree moveTree, final int detectiveIndex) {
 		Detective dt = loc.getDetectives()[detectiveIndex];
-		
+	
 		return null;
 		
 	}
@@ -46,27 +60,6 @@ public class MyGameEngine implements GameEngine {
 		}
 		return moves;
 	}
-	public Map<String,Integer> vertexFrequencies() {
-		 Map<String,Integer> countMap = new HashMap<String,Integer>();
-		 countNumberOfVertexInTreeHelper(countMap,mt.getRoot());
-		 return countMap;
-	}
-	private void countNumberOfVertexInTreeHelper (Map<String,Integer> countMap,Vertex root) {
-		if(countMap.containsKey(root.getLabel())) {
-			int count = countMap.get(root.getLabel()) +1;
-			countMap.put(root.getLabel(), count);
-		} else {
-			countMap.put(root.getLabel(), 1);
-		}
-		if(mt.outgoingEdgesOf(root).size() == 0) {
-			return;
-		}
-		for(Edge e: mt.outgoingEdgesOf(root)) {
-			Vertex v = e.getConnectedVertex(root);
-			countNumberOfVertexInTreeHelper(countMap, v);
-		}
-		
-	}
-                                                                                                                                                                                                                                                                                    
+                                                                                                                                                                                                                                                                         
 }
 

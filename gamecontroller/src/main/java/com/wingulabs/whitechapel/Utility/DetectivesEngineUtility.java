@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,11 +20,15 @@ import com.wingulabs.whitechapel.gameBoard.Edge;
 
 public class DetectivesEngineUtility {
 	public static final String SHORTEST_SQUARE_PATH = "shortest_square_paths.txt";
-
-
-	public DetectivesEngineUtility() {
+	private MoveTree mt;
+	private NavigableSet<String> sortedFq;
+	public DetectivesEngineUtility(MoveTree mt) {
+		this.mt = mt;
+		Map<String,Integer> m = vertexFrequencies();
+		sortedFq = getSortedSet(m);
 
 	}
+	@SuppressWarnings("resource")
 	public int getDistance(String origin, String destination) throws IOException {
 		try(BufferedReader rdr = new BufferedReader(new InputStreamReader(
 				getClass().getClassLoader().getResource(SHORTEST_SQUARE_PATH).openStream()))) {
@@ -81,10 +86,10 @@ public class DetectivesEngineUtility {
 	 * 
 	 * @param dts
 	 * @param priorityVertex
-	 * @return the first element is the smallest distance, the second is tE I
+	 * @return the first element is the smallest distance, the second is te i
 	 * @throws IOException
 	 */
-	public int[] getclosestDetective(Detectives dts, String priorityVertex) throws IOException {
+	public int[] getClosestDetective(Detectives dts, String priorityVertex) throws IOException {
 		int minIndex = 0;
 		int min = 99;
 		for(int i = 0 ; i< dts.getDetectives().length;i++) {
@@ -105,8 +110,15 @@ public class DetectivesEngineUtility {
 	}
 
 	private void init() throws IOException {
+
+
 	}
-	private void countNumberOfVertexInTreeHelper (MoveTree mt,Map<String,Integer> countMap,Vertex root) {
+	public Map<String,Integer> vertexFrequencies() {
+		 Map<String,Integer> countMap = new HashMap<String,Integer>();
+		 countNumberOfVertexInTreeHelper(countMap,mt.getRoot());
+		 return countMap;
+	}
+	private void countNumberOfVertexInTreeHelper (Map<String,Integer> countMap,Vertex root) {
 		if(countMap.containsKey(root.getLabel())) {
 			int count = countMap.get(root.getLabel()) +1;
 			countMap.put(root.getLabel(), count);
@@ -118,14 +130,18 @@ public class DetectivesEngineUtility {
 		}
 		for(Edge e: mt.outgoingEdgesOf(root)) {
 			Vertex v = e.getConnectedVertex(root);
-			countNumberOfVertexInTreeHelper(mt,countMap, v);
+			countNumberOfVertexInTreeHelper(countMap, v);
 		}
 	}
-	public NavigableSet<String> getSortedSet(Map<String,Integer> m) {
+          
+	private NavigableSet<String> getSortedSet(Map<String,Integer> m) {
 		ValueComparator bvc = new ValueComparator(m);
 		TreeMap<String, Integer> sorted_map = new TreeMap<String, Integer>(bvc);
 		sorted_map.putAll(m);
 		return sorted_map.descendingKeySet();
+	}
+	public String getMostFrequentVertex() {
+		return sortedFq.pollLast();
 	}
 }
 class ValueComparator implements Comparator<String> {
