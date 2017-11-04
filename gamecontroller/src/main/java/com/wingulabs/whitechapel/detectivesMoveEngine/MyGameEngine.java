@@ -61,7 +61,7 @@ public class MyGameEngine implements GameEngine {
 			int[] closestD = dUtility.getClosestDetective(dts, pVertex);
 			int detectiveIndex = closestD[1];
 			assignedDestination[detectiveIndex] = true;
-			moves.add(getMove(dts,dUtility,detectiveIndex));
+			moves.add(getMove(pVertex,dts,dUtility,detectiveIndex));
 		}
 		return moves;
 	}
