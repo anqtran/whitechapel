@@ -1,7 +1,9 @@
 package com.wingulabs.whitechapel.detectivesMoveEngine;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.wingulabs.whitechapel.Utility.DetectivesEngineUtility;
 import com.wingulabs.whitechapel.detectives.DetectiveMove;
 import com.wingulabs.whitechapel.detectives.Detectives;
 
@@ -32,12 +34,14 @@ public interface GameEngine {
 	 * @param moveTree the potential paths that Jack has taken.
 	 * @param detectiveIndex the detective for whom to determine a move.
 	 * @return The move the detective should make.
+	 * @throws  
 	 */
-	DetectiveMove getMove(Detectives loc, MoveTree moveTree,
-			int detectiveIndex);
+	String getMove(String priorityVertex, Detectives loc, DetectivesEngineUtility dUtility,
+			int detectiveIndex) throws IOException;
 	/**
 	 * Get all of the moves of detectives in one turn.
 	 * return a list of Detective Moves.
+	 * @throws IOException 
 	 */
-	List<DetectiveMove> setDetectiveMoves(Detectives dts, MoveTree mt);
+	List<String> setDetectiveMoves(Detectives dts, MoveTree mt) throws IOException;
 }

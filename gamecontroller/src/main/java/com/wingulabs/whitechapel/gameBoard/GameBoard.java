@@ -59,7 +59,13 @@ public class GameBoard {
 	 */
 	private final SimpleGraph<String, Edge> mixedGraph =
 			new SimpleGraph<>(Edge.class);
-
+	
+	/**
+	 * The graph containing square-to-circle edges.
+	 */
+	private final SimpleGraph<String, Edge> circleToSquareGraph = 
+			new SimpleGraph<>(Edge.class);
+	
 	/**
 	 * The graph containing circle-to-circle edges.
 	 */
@@ -120,6 +126,7 @@ public class GameBoard {
 	protected GameBoard() throws IOException {
 		init();
 		initCompleteGraph();
+		initCircleToSquareGraph();
 		
 	}
 
@@ -218,10 +225,44 @@ public class GameBoard {
 			}
 		}
 	}
+	private void initCircleToSquareGraph() throws IOException {
+		try (BufferedReader rdr = new BufferedReader(new InputStreamReader(
+				getClass().getClassLoader().
+				getResource(PRIMARY_EDGES_FILEPATH).openStream()))) {
+
+			String line = null;
+			while ((line = rdr.readLine()) != null) {
+				//System.out.println(line);
+				if (line.isEmpty())
+					continue;
+				if (line.startsWith("#"))
+					continue;
+				String[] edgeParts = line.split(":");
+				if (edgeParts.length != 2) {
+					throw new RuntimeException("Invalid line in edges.txt: " + line);
+				}
 	
+				String vertex1 = edgeParts[0];
+				String vertex2 = edgeParts[1];
+				
+				if((vertex1.startsWith("C") && vertex2.startsWith("C")) ||
+						(vertex1.startsWith("S") && vertex2.startsWith("S"))) {
+					continue;
+				}
+				if(vertex1.startsWith("S") ) {
+					String temp = vertex1;
+					vertex1 = vertex2;
+					vertex2 = temp;
+				}
+				circleToSquareGraph.addVertex(vertex1);
+				circleToSquareGraph.addVertex(vertex2);
+				circleToSquareGraph.addEdge(vertex1, vertex2);
+			}
+		}
+	}
 	/**
 	 * Reads the data files and process the graph.
-	 * @throws IOException If an error ocurrs throw exception.
+	 * @throws IOException If an error occurs throw exception.
 	 */
 	private void initAlleyCircleGraph() throws IOException {
 		try (BufferedReader rdr = new BufferedReader(new InputStreamReader(
@@ -355,6 +396,8 @@ public class GameBoard {
 	public SimpleGraph<String, Edge> getCompleteGraph() {
 		return completeGraph;
 	}
-	
+	public SimpleGraph<String, Edge> getCircleToSquareGraph() {
+		return circleToSquareGraph;
+	}
 
 }

@@ -1,13 +1,11 @@
 package com.wingulabs.whitechapel.Utility;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.jgrapht.graph.SimpleGraph;
 
 import com.wingulabs.whitechapel.detectives.Detectives;
-import com.wingulabs.whitechapel.detectivesMoveEngine.MoveTree.Vertex;
 import com.wingulabs.whitechapel.gameBoard.Edge;
 import com.wingulabs.whitechapel.gameBoard.GameBoard;
 
@@ -46,6 +44,10 @@ public class GraphUtility {
 		return getAdjacentVertex(root, squareGraph);
 	}
 	
+	public static Set<String> getAdjacentSquarefromCircle(final String root, GameBoard gb) {
+		SimpleGraph<String, Edge> circleToSquareGraph = gb.getCircleToSquareGraph();
+		return getAdjacentVertex(root, circleToSquareGraph);
+	}
 	public static Set<String> whereCanJackGo(String sourceCircle,Detectives detectives,GameBoard gb ) {
 		Set<String> visitedVertices = new HashSet<>();
 		return whereCanJackGoHelper(sourceCircle, visitedVertices,detectives, gb);

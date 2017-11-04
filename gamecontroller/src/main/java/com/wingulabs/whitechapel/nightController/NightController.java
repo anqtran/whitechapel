@@ -59,11 +59,12 @@ public class NightController {
 		this.detectives = detectives;
 		this.hideOut = hideOut;
 		this.jackController = new JackConsoleController(gb,jack,night);
-		this.detectiveController = new DetectiveEngineController(gb,detectives, jack.getCurrentLocation());	
+		this.detectiveController = new DetectiveConsoleController(gb, detectives);
+	//	this.detectiveController = new DetectiveEngineController(gb,detectives, jack.getCurrentLocation());	
 	}
 	public final boolean simpleRun() {
 		System.out.println("Night 1 begins!!! ");
-		int turn = 1;
+		int turn = 0;
 		while (turn < 15) {
 			turn++;
 			System.out.println("Turn " + turn);
