@@ -33,27 +33,6 @@ public final class WhiteChapelSimulator {
      * 
      */
     public static void main(final String[] args) throws IOException {
-        GameBoard gb = GameBoard.SINGLETON;
-        MyMoveTree mt = new MyMoveTree(gb, "C65");
-        DetectivesEngineUtility dUtility = new DetectivesEngineUtility(mt, new boolean[5]);
-        System.out.println(dUtility.getDetectivePath("SC40S1", "C65"));
-        System.out.println(dUtility.getDistance("SC40S1", "SC51S1W1"));
-        // System.out.println(dUtility.getDetectivePath("SC40S1",
-        // "C66").toString());
-
-        // dUtility.getDetectivePath("C62", "C22");
-
-        // mt.processJackMove(dt);
-        //// mt.processDetectiveMoveResultTester("C66", Answer.NO);
-        // mt.processJackMove(dt);
-        // mt.processJackMove(dt);
-        // mt.processJackMove(dt);
-        // mt.processJackMove(dt);
-        // MyGameEngine engine = new MyGameEngine(mt,dt);
-        //
-        // engine.getPriorityVertex(dt, mt);
-        // mt.processDetectiveMoveResultTester("C66", Answer.NO);
-
         GameController gs = new GameController();
         gs.run();
 
