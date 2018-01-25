@@ -7,27 +7,32 @@ import com.wingulabs.whitechapel.jack.Jack;
 
 /**
  * Makes decisions for detectives.
+ * 
  * @author anwar
  *
  */
 public abstract class AbstractDetectiveController {
 
-	final protected GameBoard gb;
-	
-	public AbstractDetectiveController(final GameBoard gb) {
-		this.gb = gb;
-	}
+    protected final GameBoard gb;
 
-	/**
-	 * process the detectives move.
-	 * @return List of destination of detectives.
-	 */
-	abstract List<String> detectivesMove();
-	/**
-	 * Investigation at the end of detectives move.
-	 * @param jack jack.
-	 * @return true if jack was caught.
-	 */
-	abstract boolean investigation(Jack jack);
+    public AbstractDetectiveController(final GameBoard gb) {
+        this.gb = gb;
+    }
+
+    /**
+     * process the detectives move.
+     * 
+     * @return List of destination of detectives.
+     */
+    abstract List<String> detectivesMove();
+
+    /**
+     * Investigation at the end of detectives move.
+     * 
+     * @param jack
+     *            jack.
+     * @return true if jack was caught.
+     */
+    abstract boolean investigation(Jack jack);
 
 }

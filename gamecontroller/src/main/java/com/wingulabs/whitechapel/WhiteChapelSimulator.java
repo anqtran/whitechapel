@@ -9,6 +9,7 @@ import com.wingulabs.whitechapel.detectives.Detective;
 import com.wingulabs.whitechapel.detectives.Detectives;
 import com.wingulabs.whitechapel.detectivesMoveEngine.MyMoveTree;
 import com.wingulabs.whitechapel.gameBoard.GameBoard;
+import com.wingulabs.whitechapel.gameController.GameController;
 
 /**
  * Class starts the game.
@@ -17,59 +18,44 @@ import com.wingulabs.whitechapel.gameBoard.GameBoard;
  *
  */
 public final class WhiteChapelSimulator {
-	/**
-	 * Private constructor prevents extension.
-	 */
-	private WhiteChapelSimulator() {
-	}
+    /**
+     * Private constructor prevents extension.
+     */
+    private WhiteChapelSimulator() {
+    }
 
-	/**
-	 * Main class to start the game.
-	 * 
-	 * @param args
-	 * *
-	 * @throws IOException *
-	 */
-	public static void main(final String[] args) throws IOException {
-		GameBoard gb = GameBoard.SINGLETON;
-		MyMoveTree mt = new MyMoveTree(gb, "C65");
-		DetectivesEngineUtility dUtility = new DetectivesEngineUtility(mt,new boolean[5]);
-		System.out.println(dUtility.getDetectivePath("SC40S1", "C65"));
-		System.out.println(dUtility.getDistance("SC40S1", "SC51S1W1"));
-		//System.out.println(dUtility.getDetectivePath("SC40S1", "C66").toString());
-		
-	//	dUtility.getDetectivePath("C62", "C22");
+    /**
+     * Main class to start the game.
+     * 
+     * @param args
+     * 
+     * @throws IOException
+     * 
+     */
+    public static void main(final String[] args) throws IOException {
+        GameBoard gb = GameBoard.SINGLETON;
+        MyMoveTree mt = new MyMoveTree(gb, "C65");
+        DetectivesEngineUtility dUtility = new DetectivesEngineUtility(mt, new boolean[5]);
+        System.out.println(dUtility.getDetectivePath("SC40S1", "C65"));
+        System.out.println(dUtility.getDistance("SC40S1", "SC51S1W1"));
+        // System.out.println(dUtility.getDetectivePath("SC40S1",
+        // "C66").toString());
 
-//		mt.processJackMove(dt);
-////		mt.processDetectiveMoveResultTester("C66", Answer.NO);
-//		mt.processJackMove(dt);
-//		mt.processJackMove(dt);
-//		mt.processJackMove(dt);
-//		mt.processJackMove(dt);
-//		MyGameEngine engine = new MyGameEngine(mt,dt);
-//		
-//		engine.getPriorityVertex(dt, mt);
-//		mt.processDetectiveMoveResultTester("C66", Answer.NO);
+        // dUtility.getDetectivePath("C62", "C22");
 
-//		 GameControllerConsole gs = new GameControllerConsole();
-//		 gs.runSimpleNight();
+        // mt.processJackMove(dt);
+        //// mt.processDetectiveMoveResultTester("C66", Answer.NO);
+        // mt.processJackMove(dt);
+        // mt.processJackMove(dt);
+        // mt.processJackMove(dt);
+        // mt.processJackMove(dt);
+        // MyGameEngine engine = new MyGameEngine(mt,dt);
+        //
+        // engine.getPriorityVertex(dt, mt);
+        // mt.processDetectiveMoveResultTester("C66", Answer.NO);
 
-	}	
+        GameController gs = new GameController();
+        gs.run();
 
-	private static Detectives initDetectives() {
-		Detectives dt = new Detectives();
-		List<String> detectivesLocations = new ArrayList<String>(GameBoard.SINGLETON.YELLOW_SQUARES);
-		detectivesLocations.remove("SC101S1");
-		detectivesLocations.remove("SC130S1");
-
-		Detective[] dts = dt.getDetectives();
-		for (int i = 0; i < dts.length; i++) {
-			String location = detectivesLocations.get(i);
-			System.out.println(dts[i].getColor() + " detective is at: " + location);
-			dts[i].setLocation(location);
-		}
-		return dt;
-	}
+    }
 }
-
-

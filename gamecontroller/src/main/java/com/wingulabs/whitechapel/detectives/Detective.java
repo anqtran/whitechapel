@@ -2,83 +2,91 @@ package com.wingulabs.whitechapel.detectives;
 
 /**
  * A Whitechapel Detective.
+ * 
  * @author Anwar Reddick
  *
  */
 public class Detective {
 
-	/**
-	 * Detective Color.
-	 * @author Anwar Reddick
-	 *
-	 */
-	public enum DetectiveColor {
+    /**
+     * Detective Color.
+     * 
+     * @author Anwar Reddick
+     *
+     */
+    public enum DetectiveColor {
 
-		/**
-		 * blue.
-		 */
-		BLUE,
+        /**
+         * blue.
+         */
+        BLUE,
 
-		/**
-		 * green.
-		 */
-		GREEN,
+        /**
+         * green.
+         */
+        GREEN,
 
-		/**
-		 * brown.
-		 */
-		BROWN,
+        /**
+         * brown.
+         */
+        BROWN,
 
-		/**
-		 * yellow.
-		 */
-		YELLOW,
+        /**
+         * yellow.
+         */
+        YELLOW,
 
-		/**
-		 * red.
-		 */
-		RED;
-	}
+        /**
+         * red.
+         */
+        RED;
+    }
 
-	/**
-	 * The color of the detective.
-	 */
-	private final DetectiveColor color;
+    /**
+     * The color of the detective.
+     */
+    private final DetectiveColor color;
 
-	/**
-	 * The GameBoard vertex where the detective is.
-	 */
-	private String location;
+    /**
+     * The GameBoard vertex where the detective is.
+     */
+    private String location;
 
-	/**
-	 * Initializes the detective color.
-	 * @param color the detective color.
-	 */
-	public Detective(final DetectiveColor color) {
-		this.color = color;
-	}
+    /**
+     * Initializes the detective color.
+     * 
+     * @param color
+     *            the detective color.
+     */
+    public Detective(final DetectiveColor color) {
+        this.color = color;
+    }
 
-	/**
-	 * Returns the detective's location.
-	 * @return the detective's location.
-	 */
-	public final String getLocation() {
-		return location;
-	}
+    /**
+     * Returns the detective's location.
+     * 
+     * @return the detective's location.
+     */
+    public final String getLocation() {
+        return location;
+    }
 
-	/**
-	 * Sets the detective's location.
-	 * @param location the detective's location.
-	 */
-	public final void setLocation(final String location) {
-		this.location = location;
-	}
+    /**
+     * Sets the detective's location.
+     * 
+     * @param location
+     *            the detective's location.
+     */
+    public final void setLocation(final String location) {
+        this.location = location;
+    }
 
-	/**
-	 * Returns the detective's color.
-	 * @return the detective's color.
-	 */
-	public final DetectiveColor getColor() {
-		return color;
-	}
+    /**
+     * Returns the detective's color.
+     * 
+     * @return the detective's color.
+     */
+    public final DetectiveColor getColor() {
+        return color;
+    }
 }
