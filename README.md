@@ -11,8 +11,11 @@ Install `Maven` which is a software project management and comprehension tool. `
 ## How this works
 For full understanding of the game logic, please read the rules in the following link: [White Chapel Rules]( https://images-cdn.fantasyflightgames.com/filer_public/55/ff/55ff98ec-c39b-4607-9055-fadb150605dd/lfh_rules_letter_en_low_res.pdf)  
 Notation in the graph:
-* C27: Circle 27
-* SC101S1: Square near Circle 101 located 1 move to the South
+* C27: Circle 27.
+* SC101S1: Square near Circle 101 located 1 move to the South.   
+
+
+
 The logic and the rules of the game are strictly implemented to ensure future improvement of the project.
 
 User can play as Jack and let the program handle detective by changing the `this.detectiveController = new DetectiveConsoleController(gb, detectives);` to `DetectivesEngineController`. 
